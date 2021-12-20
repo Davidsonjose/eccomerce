@@ -5,6 +5,7 @@ const { data } = require("./test");
 const expressLayout = require("express-ejs-layouts");
 const homeRoute = require("./routes/home.routes");
 const productRoute = require("./routes/product.routes");
+const userRoute = require('./routes/users.routes');
 const mongoose = require("mongoose");
 
 // console.log(http.STATUS_CODES);
@@ -36,7 +37,8 @@ mongoose
 
 //initialized route middleware
 app.use("/", homeRoute);
-app.use("/product", productRoute);
+app.use("/api/product", productRoute);
+app.use('/api/user', userRoute);
 
 // let index1 = path.join(__dirname, "views/index.html");
 // let index3 = path.join(__dirname, "views/about.html");
@@ -49,6 +51,7 @@ app.get("/api/names", (req, res) => {
     data,
   });
 });
+
 
 const PORT = process.env.PORT || 1100;
 

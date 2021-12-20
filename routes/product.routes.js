@@ -2,6 +2,8 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const Post = require("../models/Post");
+const { getAllPost, getSinglePost, logMethod } = require('../controllers/postController');
+const { authorization } = require("../controllers/authController");
 
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
@@ -14,22 +16,15 @@ const storage = multer.diskStorage({
   },
 });
 
+
 const upload = multer({ storage, limits: { fileSize: 1000000 } });
 
 const router = express.Router();
 
-router.get("/post", async (req, res, next) => {
-  try {
-    const getPost = await Post.find();
-    res.send(getPost);
-    res.render("post/create.ejs", {
-      title: "create post",
-      getPost,
-    });
-  } catch (error) {
-    return next(new Error(err));
-  }
-});
+
+
+router.use(logMethod);
+router.get("/post",authorization, getAllPost);
 
 // router.post("/post", (req, res) => {
 //   let image = upload.single("image");
@@ -40,6 +35,7 @@ router.get("/post", async (req, res, next) => {
 //     res.send({ file: req.file, body: req.body });
 // });
 // });
+router.get('/:id', getSinglePost )
 
 router.post("/post", upload.single("image"), async (req, res, next) => {
   try {
