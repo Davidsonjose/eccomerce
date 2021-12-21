@@ -28,6 +28,10 @@ const UserSchema = new mongoose.Schema(
       required: [true, "the field is required"],
       trim: true,
     },
+    resetLink: {
+      data: String,
+      default: ''
+    }
   },
   { timestamps: true }
 );

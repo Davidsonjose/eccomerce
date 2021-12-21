@@ -1,4 +1,36 @@
 const Post = require("../models/Post");
+const upload = require('../util/upload');
+// const {ApiError} = require('../util/errorHandler')
+
+
+
+exports.createPosts = (req, res, next) => {
+  const ImageFile = upload.single("image");
+  ImageFile(req, res, async (err) => {
+    try {
+      if (err) {
+        return next(new Error(err));
+      }
+      const {body, file} = req;
+      const data= {
+        image: `upload/${file.filename}`,
+        ...body
+      }
+      const savePost = await Post.create(data);
+      res.status(201).json({
+        status: 'created',
+        data: savePost
+      })
+      // res.send({file: req.file, body: req.body})
+
+    } catch (error) {
+      return next(error);
+    }
+  });
+  // const post = await Post.create({});
+};  
+
+
 
 exports.getAllPost = async (req, res, next) => {
   try {
